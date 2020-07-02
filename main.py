@@ -70,9 +70,12 @@ def startGame(name):
 
 
 if __name__ == '__main__':
-    nameList = [0, 0, 0, 0]
+    nameList = [0, 0, 0, 0]  # 同时开4个
     pcrActivityName = 'com.bilibili.priconne/com.bilibili.princonne.bili.MainActivity'
+    # 打开应用，用
+    # adb -s <serial number> shell dumpsys window windows | findstr “Current”
+    # 找到返回的结果，通常为“package/activity”的格式
     getSerialNo()
     print(nameList)
-    m_connect(nameList[0])
-    startGame(nameList[0])
+    for emulatorName in nameList:
+        startGame(emulatorName)
