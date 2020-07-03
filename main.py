@@ -184,7 +184,7 @@ class Farm:
 
     def printAccount(self):
         """
-        信息打印
+        账号信息打印
         :return:
         """
         print('%s %s' % (self.president.account, self.president.password))
