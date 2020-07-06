@@ -1,8 +1,6 @@
 import os
 import time
-
-
-# import cv2
+import cv2
 
 
 class Member:
@@ -157,8 +155,32 @@ class Farm:
         for emulatorName in self.nameList:
             Farm.m_screencap(self, emulatorName)
 
-    def image2position(self, image, name):
+    def image2position(self, name, imagepath, m=0):
         Farm.m_screencap(self, name)
+        print(name)
+        print(imagepath)
+        templatetimg = cv2.imread(imagepath, 0)  # 模板图像
+        print(type(templatetimg))
+        # if (templatetimg.empty()):
+        #     print('open template image fail!')
+        #     exit(1)
+        screenshot = cv2.imread(os.path.abspath('.') + '\\' + name + 'screenshot.png', 0)  # 屏幕截图
+        # if (screenshot.empty()):
+        #     print('open screenshot fail!')
+        #     exit(1)
+
+        methods = [cv2.TM_CCOEFF_NORMED, cv2.TM_SQDIFF_NORMED, cv2.TM_CCORR_NORMED]
+        image_x, image_y = templatetimg.shape[:2]
+        result = cv2.matchTemplate(screenshot, templatetimg, methods[m])
+        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+        print(imagepath, max_val)
+        if max_val > 0.7:
+            global center
+            center = (max_loc[0] + image_y / 2, max_loc[1] + image_x / 2)
+            print(center[0],center[1])
+            return center
+        else:
+            return False
 
     def setAccount(self, text):
         """
@@ -202,3 +224,7 @@ if __name__ == '__main__':
     time.sleep(20)
 
     farm1.getScreenshot()
+
+    time.sleep(2)
+
+    farm1.image2position(farm1.nameList[0],os.path.abspath('.')+'\m_script\images\zhucaidan.png')
