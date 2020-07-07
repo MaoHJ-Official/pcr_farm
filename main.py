@@ -20,10 +20,16 @@ class Farm:
         # 找到返回的结果，通常为“package/activity”的格式
         self.pcrActivityName = 'com.bilibili.priconne/com.bilibili.princonne.bili.MainActivity'
 
-        # 会长与公会的20名成员
+        # 会长与公会的28名成员
         # 必须与.txt文件内容匹配，否则报错
         self.president = Member()
-        self.memberLst = [Member() for i in range(20)]
+        self.memberLst = [Member() for i in range(28)]
+
+    def getPresident(self):
+        return self.president
+
+    def getMember(self):
+        return self.memberLst
 
     def m_connect(self, name):
         """
@@ -48,7 +54,7 @@ class Farm:
         """
         print(name)
         print(x, y)
-        cmd = 'adb -s' + name + 'shell input tap %s %s' % (x, y)
+        cmd = 'adb -s ' + name + ' shell input tap %s %s' % (x, y)
         try:
             os.system(cmd)
         except:
@@ -68,7 +74,7 @@ class Farm:
         :return:
         """
         print(x1, y1, x2, y2)
-        cmd = 'adb -s' + name + 'shell input swipe %s %s %s %s %s' % (x1, y1, x2, y2, duration)
+        cmd = 'adb -s ' + name + ' shell input swipe %s %s %s %s %s' % (x1, y1, x2, y2, duration)
         try:
             os.system(cmd)
         except:
@@ -83,7 +89,7 @@ class Farm:
         :param name:模拟器的serialNo
         :return:
         """
-        cmd = 'adb -s' + name + 'shell input text %s' % s
+        cmd = 'adb -s ' + name + ' shell input text %s' % s
         try:
             os.system(cmd)
         except:
@@ -175,9 +181,8 @@ class Farm:
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
         print(imagepath, max_val)
         if max_val > 0.7:
-            global center
             center = (max_loc[0] + image_y / 2, max_loc[1] + image_x / 2)
-            print(center[0],center[1])
+            print(center[0], center[1])
             return center
         else:
             return False
@@ -213,6 +218,47 @@ class Farm:
         for m in self.memberLst:
             print('%s %s' % (m.account, m.password))
 
+    def distinguish(self, name, ipath, templatename):
+        cen = False
+        ts = 0
+        while (not cen):
+            print(str(ts) + 's ' + name + ' try distinguish :' + templatename + '\n')
+            cen = Farm.image2position(self, name, ipath)
+            ts += 1
+            if (ts == 30):
+                print(name + ' fail distinguish :' + templatename)
+                break
+        return cen
+
+    def memberhavior(self, name, member):
+        cen = False
+        ipath = ''
+        # zhucaidan.png
+        ipath = os.path.abspath('.') + '\m_script\images\m1zhucaidan.png'
+        cen = Farm.distinguish(self, name, ipath, '主菜单')
+        if (not cen): exit(1)
+        Farm.m_tap(self, 600, 400, name)  # 特例
+
+        # qiehuanzhanghao.png
+        ipath = os.path.abspath('.') + '\m_script\images\m2qiehuanzhanghao.png'
+        cen = Farm.distinguish(self, name, ipath, '切换账号')
+        if (not cen): exit(1)
+        Farm.m_tap(self, cen[0], cen[1], name)
+
+        # bilibilidenglu.png
+        ipath = os.path.abspath('.') + '\m_script\images\m3bilibilidenglu.png'
+        cen = Farm.distinguish(self, name, ipath, 'bilibili登录')
+        if (not cen): exit(1)
+        Farm.m_tap(self, 600, 260, name)
+        Farm.m_text(self, 'hnxsejctwz', name)
+        Farm.m_tap(self, 600, 330, name)
+        Farm.m_text(self, 'xiaohei663030', name)
+        # denglu.png
+        ipath = os.path.abspath('.') + '\m_script\images\m4denglu.png'
+        cen = Farm.distinguish(self, name, ipath, '登录')
+        if (not cen): exit(1)
+        Farm.m_tap(self, cen[0], cen[1], name)
+
 
 if __name__ == '__main__':
     farm1 = Farm()
@@ -221,10 +267,4 @@ if __name__ == '__main__':
     farm1.setAccount(os.path.abspath('.') + '\m_script\guild1.txt')
     farm1.printAccount()
 
-    time.sleep(20)
-
-    farm1.getScreenshot()
-
-    time.sleep(2)
-
-    farm1.image2position(farm1.nameList[0],os.path.abspath('.')+'\m_script\images\zhucaidan.png')
+    farm1.memberhavior(farm1.nameList[0], farm1.getMember(0))
