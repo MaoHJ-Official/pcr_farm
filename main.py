@@ -328,6 +328,7 @@ if __name__ == '__main__':
     print('start thread')
 
     # farm1.memberhavior(farm1.nameList[0], farm1.getMember(1))
+
     print('0')
     t0 = threading.Thread(target=farm1.memberhavior, args=(farm1.nameList[0], farm1.getMember(0),))
     print('1')
