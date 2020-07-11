@@ -1,6 +1,7 @@
 import os
 import time
 import cv2
+import _thread
 
 
 class Member:
@@ -28,8 +29,8 @@ class Farm:
     def getPresident(self):
         return self.president
 
-    def getMember(self):
-        return self.memberLst
+    def getMember(self, i):
+        return self.memberLst[i]
 
     def m_connect(self, name):
         """
@@ -52,7 +53,6 @@ class Farm:
         :param name:模拟器的serialNo
         :return:
         """
-        print(name)
         print(x, y)
         cmd = 'adb -s ' + name + ' shell input tap %s %s' % (x, y)
         try:
@@ -89,6 +89,7 @@ class Farm:
         :param name:模拟器的serialNo
         :return:
         """
+        print(s)
         cmd = 'adb -s ' + name + ' shell input text %s' % s
         try:
             os.system(cmd)
@@ -104,7 +105,6 @@ class Farm:
         :return:
         """
         path = os.path.abspath('.') + '\\' + name + 'screenshot.png'
-        print(path)
         try:
             os.system('adb -s ' + name + ' shell screencap /data/' + name + 'screen.png')
         except:
@@ -125,7 +125,7 @@ class Farm:
         cmd0 = 'adb kill-server'
         cmd = 'adb devices'
         try:
-            os.system(cmd0)
+            # os.system(cmd0)
             os.system(cmd)
         except:
             print('get serial number fail')
@@ -163,10 +163,7 @@ class Farm:
 
     def image2position(self, name, imagepath, m=0):
         Farm.m_screencap(self, name)
-        print(name)
-        print(imagepath)
         templatetimg = cv2.imread(imagepath, 0)  # 模板图像
-        print(type(templatetimg))
         # if (templatetimg.empty()):
         #     print('open template image fail!')
         #     exit(1)
@@ -222,26 +219,30 @@ class Farm:
         cen = False
         ts = 0
         while (not cen):
-            print(str(ts) + 's ' + name + ' try distinguish :' + templatename + '\n')
-            cen = Farm.image2position(self, name, ipath)
             ts += 1
             if (ts == 30):
                 print(name + ' fail distinguish :' + templatename)
                 break
+            cen = Farm.image2position(self, name, ipath)
         return cen
 
     def memberhavior(self, name, member):
+        if name == '':
+            print('emulator name error')
+            exit(1)
         cen = False
         ipath = ''
         # zhucaidan.png
         ipath = os.path.abspath('.') + '\m_script\images\m1zhucaidan.png'
         cen = Farm.distinguish(self, name, ipath, '主菜单')
         if (not cen): exit(1)
-        Farm.m_tap(self, 600, 400, name)  # 特例
+        Farm.m_tap(self, 600, 400, name)
 
+        print('---------------------------%s 开始识别 -切换账号- ' % time.process_time())
         # qiehuanzhanghao.png
         ipath = os.path.abspath('.') + '\m_script\images\m2qiehuanzhanghao.png'
         cen = Farm.distinguish(self, name, ipath, '切换账号')
+        print('---------------------------%s 结束识别 -切换账号- ' % time.process_time())
         if (not cen): exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
@@ -250,9 +251,9 @@ class Farm:
         cen = Farm.distinguish(self, name, ipath, 'bilibili登录')
         if (not cen): exit(1)
         Farm.m_tap(self, 600, 260, name)
-        Farm.m_text(self, 'hnxsejctwz', name)
+        Farm.m_text(self, member.account, name)
         Farm.m_tap(self, 600, 330, name)
-        Farm.m_text(self, 'xiaohei663030', name)
+        Farm.m_text(self, member.password, name)
         # denglu.png
         ipath = os.path.abspath('.') + '\m_script\images\m4denglu.png'
         cen = Farm.distinguish(self, name, ipath, '登录')
@@ -267,4 +268,4 @@ if __name__ == '__main__':
     farm1.setAccount(os.path.abspath('.') + '\m_script\guild1.txt')
     farm1.printAccount()
 
-    farm1.memberhavior(farm1.nameList[0], farm1.getMember(0))
+    farm1.memberhavior(farm1.nameList[0], farm1.getMember(1))
