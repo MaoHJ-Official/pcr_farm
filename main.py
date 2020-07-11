@@ -1,7 +1,7 @@
 import os
 import time
 import cv2
-import _thread
+import threading
 
 
 class Member:
@@ -57,6 +57,7 @@ class Farm:
         cmd = 'adb -s ' + name + ' shell input tap %s %s' % (x, y)
         try:
             os.system(cmd)
+            print('---------------------------%s %s 点击 ' % (time.time(), name))
         except:
             print('click fail' + name)
             exit(1)
@@ -77,6 +78,7 @@ class Farm:
         cmd = 'adb -s ' + name + ' shell input swipe %s %s %s %s %s' % (x1, y1, x2, y2, duration)
         try:
             os.system(cmd)
+            print('---------------------------%s %s 滑动 ' % (time.time(), name))
         except:
             print('swipe fail' + name)
             exit(1)
@@ -93,6 +95,7 @@ class Farm:
         cmd = 'adb -s ' + name + ' shell input text %s' % s
         try:
             os.system(cmd)
+            print('---------------------------%s %s 输入 %s ' % (time.time(), name, s))
         except:
             print('text fail' + name)
             exit(1)
@@ -215,15 +218,26 @@ class Farm:
         for m in self.memberLst:
             print('%s %s' % (m.account, m.password))
 
-    def distinguish(self, name, ipath, templatename):
+    def distinguish(self, name, ipath, t, templatename='模板图像'):
+        """
+        识别函数
+        :param name: 模拟器serialNo
+        :param ipath: 模板图像路径
+        :param t: 循环次数
+        :param templatename: 模板图像名称，用于输出
+        :return: cen
+        """
+        print('---------------------------%s %s 开始识别 %s ' % (time.time(), name, templatename))
         cen = False
         ts = 0
         while (not cen):
+            print('---------------------------%s %s 循环识别 %s ' % (time.time(), name, templatename))
             ts += 1
-            if (ts == 30):
+            if (ts == t):
                 print(name + ' fail distinguish :' + templatename)
                 break
             cen = Farm.image2position(self, name, ipath)
+        print('---------------------------%s %s 识别结束 %s ' % (time.time(), name, templatename))
         return cen
 
     def memberhavior(self, name, member):
@@ -234,29 +248,73 @@ class Farm:
         ipath = ''
         # zhucaidan.png
         ipath = os.path.abspath('.') + '\m_script\images\m1zhucaidan.png'
-        cen = Farm.distinguish(self, name, ipath, '主菜单')
+        cen = Farm.distinguish(self, name, ipath, 30, '主菜单')
         if (not cen): exit(1)
         Farm.m_tap(self, 600, 400, name)
 
-        print('---------------------------%s 开始识别 -切换账号- ' % time.process_time())
         # qiehuanzhanghao.png
-        ipath = os.path.abspath('.') + '\m_script\images\m2qiehuanzhanghao.png'
-        cen = Farm.distinguish(self, name, ipath, '切换账号')
-        print('---------------------------%s 结束识别 -切换账号- ' % time.process_time())
-        if (not cen): exit(1)
-        Farm.m_tap(self, cen[0], cen[1], name)
+        # ipath = os.path.abspath('.') + '\m_script\images\m2qiehuanzhanghao.png'
+        # cen = Farm.distinguish(self, name, ipath, '切换账号')
+        # if (not cen): exit(1)
+        # Farm.m_tap(self, cen[0], cen[1], name)
+        for i in range(5):
+            Farm.m_tap(self, 1209.5, 38, name)  # 特例，识别速度不够快
 
         # bilibilidenglu.png
         ipath = os.path.abspath('.') + '\m_script\images\m3bilibilidenglu.png'
-        cen = Farm.distinguish(self, name, ipath, 'bilibili登录')
+        cen = Farm.distinguish(self, name, ipath, 5, 'bilibili登录')
         if (not cen): exit(1)
         Farm.m_tap(self, 600, 260, name)
+        time.sleep(0.5)
         Farm.m_text(self, member.account, name)
+        time.sleep(0.5)
         Farm.m_tap(self, 600, 330, name)
+        time.sleep(0.5)
         Farm.m_text(self, member.password, name)
         # denglu.png
         ipath = os.path.abspath('.') + '\m_script\images\m4denglu.png'
-        cen = Farm.distinguish(self, name, ipath, '登录')
+        cen = Farm.distinguish(self, name, ipath, 5, '登录')
+        if (not cen): exit(1)
+        Farm.m_tap(self, cen[0], cen[1], name)
+
+        # m5tiaoguo.png
+        # ipath = os.path.abspath('.') + '\m_script\images\m5tiaoguo.png'
+        # cen = Farm.distinguish(self, name, ipath, 5, '跳过')
+        # if (cen):
+        #     Farm.m_tap(self, cen[0], cen[1], name)
+
+        # m6tongzhi.png
+        ipath = os.path.abspath('.') + '\m_script\images\m6tongzhi.png'
+        cen = Farm.distinguish(self, name, ipath, 10, '通知')
+        if (not cen): exit(1)
+        # m7guanbi.png
+        ipath = os.path.abspath('.') + '\m_script\images\m7guanbi.png'
+        cen = Farm.distinguish(self, name, ipath, 5, '关闭')
+        if (not cen): exit(1)
+        Farm.m_tap(self, cen[0], cen[1], name)
+
+        # m8maoxian.png
+        ipath = os.path.abspath('.') + '\m_script\images\m8maoxian.png'
+        cen = Farm.distinguish(self, name, ipath, 5, '冒险')
+        if (not cen): exit(1)
+        Farm.m_tap(self, cen[0], cen[1], name)
+
+        # m9dixiacheng.png
+        ipath = os.path.abspath('.') + '\m_script\images\m9dixiacheng.png'
+        cen = Farm.distinguish(self, name, ipath, 5, '地下城')
+        if (not cen): exit(1)
+        Farm.m_tap(self, cen[0], cen[1], name)
+
+        # m91putong.png
+        ipath = os.path.abspath('.') + '\m_script\images\m91putong.png'
+        cen = Farm.distinguish(self, name, ipath, 5, '普通')
+        if (not cen): exit(1)
+        Farm.m_tap(self, cen[0], cen[1], name)
+        # above done
+
+        # m92OK.png
+        ipath = os.path.abspath('.') + '\m_script\images\m92OK.png'
+        cen = Farm.distinguish(self, name, ipath, 5, 'OK')
         if (not cen): exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
@@ -267,5 +325,24 @@ if __name__ == '__main__':
     farm1.startGame()
     farm1.setAccount(os.path.abspath('.') + '\m_script\guild1.txt')
     farm1.printAccount()
+    print('start thread')
 
-    farm1.memberhavior(farm1.nameList[0], farm1.getMember(1))
+    # farm1.memberhavior(farm1.nameList[0], farm1.getMember(1))
+    print('0')
+    t0 = threading.Thread(target=farm1.memberhavior, args=(farm1.nameList[0], farm1.getMember(0),))
+    print('1')
+    t1 = threading.Thread(target=farm1.memberhavior, args=(farm1.nameList[1], farm1.getMember(1),))
+    print('2')
+    t2 = threading.Thread(target=farm1.memberhavior, args=(farm1.nameList[2], farm1.getMember(2),))
+    print('3')
+    t3 = threading.Thread(target=farm1.memberhavior, args=(farm1.nameList[3], farm1.getMember(3),))
+
+    t0.start()
+    t1.start()
+    t2.start()
+    t3.start()
+
+    t0.join()
+    t1.join()
+    t2.join()
+    t3.join()
