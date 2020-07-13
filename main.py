@@ -248,7 +248,7 @@ class Farm:
         ipath = ''
         # zhucaidan.png
         ipath = os.path.abspath('.') + '\m_script\images\m1zhucaidan.png'
-        cen = Farm.distinguish(self, name, ipath, 60, '主菜单')
+        cen = Farm.distinguish(self, name, ipath, 120, '主菜单')
         if not cen: exit(1)
         Farm.m_tap(self, 600, 400, name)
 
@@ -279,7 +279,7 @@ class Farm:
 
         # m5tiaoguo.png
         ipath = os.path.abspath('.') + '\m_script\images\m5tiaoguo.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '跳过')
+        cen = Farm.distinguish(self, name, ipath, 5, '跳过')
         if cen:
             Farm.m_tap(self, cen[0], cen[1], name)
 
@@ -413,22 +413,22 @@ class Farm:
 if __name__ == '__main__':
     farm1 = Farm()
     farm1.getSerialNo()
-    farm1.startGame()
     farm1.setAccount(os.path.abspath('.') + '\m_script\guild1.txt')
     farm1.printAccount()
-    print('start thread')
 
     # farm1.memberhavior(farm1.nameList[0], farm1.getMember(1))
 
     for i in range(7):
+        farm1.startGame()
+        time.sleep(5)
         print('emulator 0 start member %s' % (4 * i))
-        t0 = threading.Thread(target=farm1.memberhavior, args=(farm1.nameList[4 * i], farm1.getMember(0),))
+        t0 = threading.Thread(target=farm1.memberhavior, args=(farm1.nameList[0], farm1.getMember(4 * i),))
         print('emulator 1 start member %s' % (4 * i + 1))
-        t1 = threading.Thread(target=farm1.memberhavior, args=(farm1.nameList[4 * i + 1], farm1.getMember(1),))
+        t1 = threading.Thread(target=farm1.memberhavior, args=(farm1.nameList[1], farm1.getMember(4 * i + 1),))
         print('emulator 2 start member %s' % (4 * i + 2))
-        t2 = threading.Thread(target=farm1.memberhavior, args=(farm1.nameList[4 * i + 2], farm1.getMember(2),))
+        t2 = threading.Thread(target=farm1.memberhavior, args=(farm1.nameList[2], farm1.getMember(4 * i + 2),))
         print('emulator 3 start member %s' % (4 * i + 3))
-        t3 = threading.Thread(target=farm1.memberhavior, args=(farm1.nameList[4 * i + 3], farm1.getMember(3),))
+        t3 = threading.Thread(target=farm1.memberhavior, args=(farm1.nameList[3], farm1.getMember(4 * i + 3),))
 
         t0.start()
         t1.start()
