@@ -290,148 +290,61 @@ class Farm:
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
-        # m5tiaoguo.png
-        ipath = os.path.abspath('.') + '\m_script\images\m5tiaoguo.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '跳过')
-        if cen:
-            Farm.m_tap(self, cen[0], cen[1], name)
-
-        # 兰德索尔杯特制版
-        # m53.png
-        ipath = os.path.abspath('.') + '\m_script\images\m53.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '3')
-        if not cen: exit(1)
-        Farm.m_tap(self, cen[0], cen[1], name)
-
-        # m5jingsaikaishi.png
-        ipath = os.path.abspath('.') + '\m_script\images\m5jingsaikaishi.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '竞赛开始')
-        if not cen: exit(1)
-        Farm.m_tap(self, cen[0], cen[1], name)
-
-        # m5end.png
-        ipath = os.path.abspath('.') + '\m_script\images\m5end.png'
-        cen = Farm.distinguish(self, name, ipath, 60, '赛马结束')
-        if not cen: exit(1)
-        Farm.m_tap(self, cen[0], cen[1], name)
-        # 兰德索尔杯特制版
-
         # m6tongzhi.png
         ipath = os.path.abspath('.') + '\m_script\images\m6tongzhi.png'
         cen = Farm.distinguish(self, name, ipath, 15, '通知')
         if not cen: exit(1)
+
         # m7guanbi.png
         ipath = os.path.abspath('.') + '\m_script\images\m7guanbi.png'
         cen = Farm.distinguish(self, name, ipath, 15, '关闭')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
-        # m8maoxian.png
-        ipath = os.path.abspath('.') + '\m_script\images\m8maoxian.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '冒险')
+        # m8liwu.png
+        ipath = os.path.abspath('.') + '\m_script\images\m8liwu.png'
+        cen = Farm.distinguish(self, name, ipath, 15, '礼物')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
-        # m9dixiacheng.png
-        ipath = os.path.abspath('.') + '\m_script\images\m9dixiacheng.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '地下城')
-        if not cen: exit(1)
-        Farm.m_tap(self, cen[0], cen[1], name)
-
-        # m91putong.png
-        ipath = os.path.abspath('.') + '\m_script\images\m91putong.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '普通')
-        if not cen: exit(1)
-        Farm.m_tap(self, cen[0], cen[1], name)
-        # above done
-
-        # m92OK.png
-        ipath = os.path.abspath('.') + '\m_script\images\m92OK.png'
-        cen = Farm.distinguish(self, name, ipath, 15, 'OK')
-        if not cen: exit(1)
-        Farm.m_tap(self, cen[0], cen[1], name)
-
-        # m93yiceng.png
-        ipath = os.path.abspath('.') + '\m_script\images\m93yiceng.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '1层')
-        if not cen: exit(1)
-        Farm.m_tap(self, cen[0], cen[1], name)
-
-        # m93tiaozhan.png
-        ipath = os.path.abspath('.') + '\m_script\images\m93tiaozhan.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '挑战')
-        if not cen: exit(1)
-        Farm.m_tap(self, cen[0], cen[1], name)
-
-        # m94zhiyuan.png
-        ipath = os.path.abspath('.') + '\m_script\images\m94zhiyuan.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '支援')
-        if not cen: exit(1)
-        Farm.m_tap(self, cen[0], cen[1], name)
-
-        # m95yly.png
-        ipath = os.path.abspath('.') + '\m_script\images\m95yly.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '伊莉雅')
-        if not cen: exit(1)
-        Farm.m_tap(self, cen[0], cen[1], name)
-
-        # m96zhandoukaishi.png
-        ipath = os.path.abspath('.') + '\m_script\images\m96zhandoukaishi.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '战斗开始')
-        if not cen: exit(1)
-        Farm.m_tap(self, cen[0], cen[1], name)
-
-        # m97OK.png
-        ipath = os.path.abspath('.') + '\m_script\images\m97OK.png'
-        cen = Farm.distinguish(self, name, ipath, 15, 'OK')
-        if not cen: exit(1)
-        Farm.m_tap(self, cen[0], cen[1], name)
-
-        # m98qianwangdixiacheng.png
-        ipath = os.path.abspath('.') + '\m_script\images\m98qianwangdixiacheng.png'
-        cen_fail = Farm.distinguish(self, name, ipath, 15, '前往地下城')
-
-        # m98xiayibu.png
-        ipath = os.path.abspath('.') + '\m_script\images\m98xiayibu.png'
-        cen_success = Farm.distinguish(self, name, ipath, 15, '下一步')
-
-        if cen_fail:
-            Farm.m_tap(self, cen_fail[0], cen_fail[1], name)
-        if cen_success:
-            Farm.m_tap(self, cen_success[0], cen_success[1], name)
-            # m98OK.png
-            ipath = os.path.abspath('.') + '\m_script\images\m98OK.png'
-            cen = Farm.distinguish(self, name, ipath, 15, 'OK')
-            if not cen: exit(1)
-            Farm.m_tap(self, cen[0], cen[1], name)
-
-        # m99chetui.png
-        ipath = os.path.abspath('.') + '\m_script\images\m99chetui.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '撤退')
-        if not cen: exit(1)
-        Farm.m_tap(self, cen[0], cen[1], name)
-
-        # m991OK.png
-        ipath = os.path.abspath('.') + '\m_script\images\m991OK.png'
-        cen = Farm.distinguish(self, name, ipath, 15, 'OK')
-        if not cen: exit(1)
-        Farm.m_tap(self, cen[0], cen[1], name)
-        # above done
-
-        # m992gonghuizhijia.png
-        ipath = os.path.abspath('.') + '\m_script\images\m992gonghuizhijia.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '公会之家')
-        if not cen: exit(1)
-        Farm.m_tap(self, cen[0], cen[1], name)
-
-        # m993quanbushouqu.png
-        ipath = os.path.abspath('.') + '\m_script\images\m993quanbushouqu.png'
+        # m81quanbushouqu.png
+        ipath = os.path.abspath('.') + '\m_script\images\m81quanbushouqu.png'
         cen = Farm.distinguish(self, name, ipath, 15, '全部收取')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
-        # m994guanbi.png
-        ipath = os.path.abspath('.') + '\m_script\images\m994guanbi.png'
+        # m82OK.png
+        ipath = os.path.abspath('.') + '\m_script\images\m82OK.png'
+        cen = Farm.distinguish(self, name, ipath, 15, 'OK')
+        if not cen: exit(1)
+        Farm.m_tap(self, cen[0], cen[1], name)
+
+        # m83OK.png
+        ipath = os.path.abspath('.') + '\m_script\images\m83OK.png'
+        cen = Farm.distinguish(self, name, ipath, 15, 'OK')
+        if not cen: exit(1)
+        Farm.m_tap(self, cen[0], cen[1], name)
+
+        # m84quxiao.png
+        ipath = os.path.abspath('.') + '\m_script\images\m84quxiao.png'
+        cen = Farm.distinguish(self, name, ipath, 15, '取消')
+        if not cen: exit(1)
+        Farm.m_tap(self, cen[0], cen[1], name)
+
+        # m85renwu.png
+        ipath = os.path.abspath('.') + '\m_script\images\m85renwu.png'
+        cen = Farm.distinguish(self, name, ipath, 15, '任务')
+        if not cen: exit(1)
+        Farm.m_tap(self, cen[0], cen[1], name)
+
+        # m86quanbushouqu.png
+        ipath = os.path.abspath('.') + '\m_script\images\m86quanbushouqu.png'
+        cen = Farm.distinguish(self, name, ipath, 15, '全部收取')
+        if not cen: exit(1)
+        Farm.m_tap(self, cen[0], cen[1], name)
+
+        # m87guanbi.png
+        ipath = os.path.abspath('.') + '\m_script\images\m87guanbi.png'
         cen = Farm.distinguish(self, name, ipath, 15, '关闭')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
@@ -447,25 +360,6 @@ class Farm:
         cen = Farm.distinguish(self, name, ipath, 15, '主线关卡')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
-
-        for i in range(3):
-            # m997jia.png
-            ipath = os.path.abspath('.') + '\m_script\images\m997jia.png'
-            cen = Farm.distinguish(self, name, ipath, 15, '加')
-            if not cen: exit(1)
-            Farm.m_tap(self, cen[0], cen[1], name)
-
-            # m998OK.png
-            ipath = os.path.abspath('.') + '\m_script\images\m998OK.png'
-            cen = Farm.distinguish(self, name, ipath, 15, 'OK')
-            if not cen: exit(1)
-            Farm.m_tap(self, cen[0], cen[1], name)
-
-            # m999OK.png
-            ipath = os.path.abspath('.') + '\m_script\images\m999OK.png'
-            cen = Farm.distinguish(self, name, ipath, 15, 'OK')
-            if not cen: exit(1)
-            Farm.m_tap(self, cen[0], cen[1], name)
 
         # m9991sanyi.png
         ipath = os.path.abspath('.') + '\m_script\images\m9991sanyi.png'
