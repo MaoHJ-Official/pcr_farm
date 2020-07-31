@@ -42,7 +42,7 @@ class Farm:
         try:
             os.system(cmd)
         except:
-            print('connect %s fail' % name)
+            print('---------------------------connect %s fail' % name)
             exit(1)
 
     def m_tap(self, x, y, name):
@@ -53,13 +53,14 @@ class Farm:
         :param name:模拟器的serialNo
         :return:
         """
-        print(x, y)
         cmd = 'adb -s ' + name + ' shell input tap %s %s' % (x, y)
         try:
             os.system(cmd)
-            print('---------------------------%s %s 点击 ' % (time.time(), name))
+            print(
+                '---------------------------' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ' %s 点击 %s %s' %
+                (name, x, y))
         except:
-            print('click fail' + name)
+            print('---------------------------click fail' + name)
             exit(1)
         print(cmd)
 
@@ -74,13 +75,14 @@ class Farm:
         :param name:模拟器的serialNo
         :return:
         """
-        print(x1, y1, x2, y2)
         cmd = 'adb -s ' + name + ' shell input swipe %s %s %s %s %s' % (x1, y1, x2, y2, duration)
         try:
             os.system(cmd)
-            print('---------------------------%s %s 滑动 ' % (time.time(), name))
+            print('---------------------------' + time.strftime("%Y-%m-%d %H:%M:%S",
+                                                                time.localtime()) + ' %s 滑动 %s %s %s %s' % (
+                      name, x1, y1, x2, y2))
         except:
-            print('swipe fail' + name)
+            print('---------------------------swipe fail' + name)
             exit(1)
         print(cmd)
 
@@ -91,13 +93,14 @@ class Farm:
         :param name:模拟器的serialNo
         :return:
         """
-        print(s)
         cmd = 'adb -s ' + name + ' shell input text %s' % s
         try:
             os.system(cmd)
-            print('---------------------------%s %s 输入 %s ' % (time.time(), name, s))
+            print(
+                '---------------------------' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ' %s 输入 %s ' % (
+                    name, s))
         except:
-            print('text fail' + name)
+            print('---------------------------text fail' + name)
             exit(1)
         print(cmd)
 
@@ -111,13 +114,13 @@ class Farm:
         try:
             os.system('adb -s ' + name + ' shell screencap /data/' + name + 'screen.png')
         except:
-            print('%s screencap fail' % name)
+            print('---------------------------%s screencap fail' % name)
             exit(1)
 
         try:
             os.system('adb -s ' + name + ' pull /data/' + name + 'screen.png %s' % path)
         except:
-            print('%s pull screencap fail' % name)
+            print('---------------------------%s pull screencap fail' % name)
             exit(1)
 
     def getSerialNo(self):
@@ -131,7 +134,7 @@ class Farm:
             # os.system(cmd0)
             os.system(cmd)
         except:
-            print('get serial number fail')
+            print('---------------------------get serial number fail')
             exit(1)
         r = os.popen(cmd)
         r.readline()
@@ -152,7 +155,7 @@ class Farm:
             try:
                 os.system(cmd)
             except:
-                print('%s start game fail' % emulatorName)
+                print('---------------------------%s start game fail' % emulatorName)
                 exit(1)
 
     def endGame(self):
@@ -165,7 +168,7 @@ class Farm:
             try:
                 os.system(cmd)
             except:
-                print('%s end game fail' % emulatorName)
+                print('---------------------------%s end game fail' % emulatorName)
                 exit(1)
 
     def getScreenshot(self):
@@ -208,7 +211,7 @@ class Farm:
         """
         f = open(text, 'r')
         if (not f):
-            print('guild file open fail')
+            print('---------------------------guild file open fail')
             exit(1)
 
         president = f.readline()
@@ -231,7 +234,7 @@ class Farm:
         for m in self.memberLst:
             print('%s %s' % (m.account, m.password))
 
-    def distinguish(self, name, ipath, t, templatename='模板图像'):
+    def recognize(self, name, ipath, t, templatename='模板图像'):
         """
         识别函数
         :param name: 模拟器serialNo
@@ -240,28 +243,32 @@ class Farm:
         :param templatename: 模板图像名称，用于输出
         :return: cen
         """
-        print('---------------------------%s %s 开始识别 %s ' % (time.time(), name, templatename))
+        print('---------------------------' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ' %s 开始识别 %s ' % (
+            name, templatename))
         cen = False
         ts = 0
         while (not cen):
-            print('---------------------------%s %s 循环识别 %s ' % (time.time(), name, templatename))
+            print('---------------------------' + time.strftime("%Y-%m-%d %H:%M:%S",
+                                                                time.localtime()) + ' %s 循环识别 %s ' % (
+                      name, templatename))
             ts += 1
             if (ts == t):
-                print(name + ' fail distinguish :' + templatename)
+                print('---------------------------' + name + ' fail recognize :' + templatename)
                 break
             cen = Farm.image2position(self, name, ipath)
-        print('---------------------------%s %s 识别结束 %s ' % (time.time(), name, templatename))
+        print('---------------------------' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ' %s 识别结束 %s ' % (
+            name, templatename))
         return cen
 
     def memberhavior(self, name, member):
         if name == '':
-            print('emulator name error')
+            print('---------------------------emulator name error')
             exit(1)
         cen = False
         ipath = ''
         # zhucaidan.png
         ipath = os.path.abspath('.') + '\m_script\images\m1zhucaidan.png'
-        cen = Farm.distinguish(self, name, ipath, 120, '主菜单')
+        cen = Farm.recognize(self, name, ipath, 120, '主菜单')
         if not cen: exit(1)
         Farm.m_tap(self, 600, 400, name)
 
@@ -275,7 +282,7 @@ class Farm:
 
         # bilibilidenglu.png
         ipath = os.path.abspath('.') + '\m_script\images\m3bilibilidenglu.png'
-        cen = Farm.distinguish(self, name, ipath, 15, 'bilibili登录')
+        cen = Farm.recognize(self, name, ipath, 15, 'bilibili登录')
         if not cen: exit(1)
         Farm.m_tap(self, 600, 260, name)
         time.sleep(0.5)
@@ -286,114 +293,114 @@ class Farm:
         Farm.m_text(self, member.password, name)
         # denglu.png
         ipath = os.path.abspath('.') + '\m_script\images\m4denglu.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '登录')
+        cen = Farm.recognize(self, name, ipath, 15, '登录')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
         # m6tongzhi.png
         ipath = os.path.abspath('.') + '\m_script\images\m6tongzhi.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '通知')
+        cen = Farm.recognize(self, name, ipath, 15, '通知')
         if not cen: exit(1)
 
         # m7guanbi.png
         ipath = os.path.abspath('.') + '\m_script\images\m7guanbi.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '关闭')
+        cen = Farm.recognize(self, name, ipath, 15, '关闭')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
         # m8liwu.png
         ipath = os.path.abspath('.') + '\m_script\images\m8liwu.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '礼物')
+        cen = Farm.recognize(self, name, ipath, 15, '礼物')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
         # m81quanbushouqu.png
         ipath = os.path.abspath('.') + '\m_script\images\m81quanbushouqu.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '全部收取')
+        cen = Farm.recognize(self, name, ipath, 15, '全部收取')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
         # m82OK.png
         ipath = os.path.abspath('.') + '\m_script\images\m82OK.png'
-        cen = Farm.distinguish(self, name, ipath, 15, 'OK')
+        cen = Farm.recognize(self, name, ipath, 15, 'OK')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
         # m83OK.png
         ipath = os.path.abspath('.') + '\m_script\images\m83OK.png'
-        cen = Farm.distinguish(self, name, ipath, 15, 'OK')
+        cen = Farm.recognize(self, name, ipath, 15, 'OK')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
         # m84quxiao.png
         ipath = os.path.abspath('.') + '\m_script\images\m84quxiao.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '取消')
+        cen = Farm.recognize(self, name, ipath, 15, '取消')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
         # m85renwu.png
         ipath = os.path.abspath('.') + '\m_script\images\m85renwu.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '任务')
+        cen = Farm.recognize(self, name, ipath, 15, '任务')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
         # m86quanbushouqu.png
         ipath = os.path.abspath('.') + '\m_script\images\m86quanbushouqu.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '全部收取')
+        cen = Farm.recognize(self, name, ipath, 15, '全部收取')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
         # m87guanbi.png
         ipath = os.path.abspath('.') + '\m_script\images\m87guanbi.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '关闭')
+        cen = Farm.recognize(self, name, ipath, 15, '关闭')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
         # m995maoxian.png
         ipath = os.path.abspath('.') + '\m_script\images\m995maoxian.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '冒险')
+        cen = Farm.recognize(self, name, ipath, 15, '冒险')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
         # m996zhuxianguanqia.png
         ipath = os.path.abspath('.') + '\m_script\images\m996zhuxianguanqia.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '主线关卡')
+        cen = Farm.recognize(self, name, ipath, 15, '主线关卡')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
         # m9991sanyi.png
         ipath = os.path.abspath('.') + '\m_script\images\m9991sanyi.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '3-1')
+        cen = Farm.recognize(self, name, ipath, 15, '3-1')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
         # m9992jia.png
         ipath = os.path.abspath('.') + '\m_script\images\m9992jia.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '加')
+        cen = Farm.recognize(self, name, ipath, 15, '加')
         if not cen: exit(1)
         Farm.m_swipe(self, cen[0], cen[1], cen[0], cen[1], 15000, name)  # 长按15000ms = 15s
 
         # m9993shiyong.png
         ipath = os.path.abspath('.') + '\m_script\images\m9993shiyong.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '使用')
+        cen = Farm.recognize(self, name, ipath, 15, '使用')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
         # m9993OK.png
         ipath = os.path.abspath('.') + '\m_script\images\m9993OK.png'
-        cen = Farm.distinguish(self, name, ipath, 15, 'OK')
+        cen = Farm.recognize(self, name, ipath, 15, 'OK')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
         # m9994tiaoguo.png
         ipath = os.path.abspath('.') + '\m_script\images\m9994tiaoguo.png'
-        cen = Farm.distinguish(self, name, ipath, 15, '跳过')
+        cen = Farm.recognize(self, name, ipath, 15, '跳过')
         if cen:
             Farm.m_tap(self, cen[0], cen[1], name)
 
         # m9995OK.png
         ipath = os.path.abspath('.') + '\m_script\images\m9995OK.png'
-        cen = Farm.distinguish(self, name, ipath, 15, 'OK')
+        cen = Farm.recognize(self, name, ipath, 15, 'OK')
         if not cen: exit(1)
         Farm.m_tap(self, cen[0], cen[1], name)
 
@@ -410,13 +417,13 @@ if __name__ == '__main__':
         farm1.startGame()
         time.sleep(5)
 
-        print('emulator 0 start member %s' % (4 * i))
+        print('---------------------------emulator 0 start member %s' % (4 * i))
         t0 = threading.Thread(target=farm1.memberhavior, args=(farm1.nameList[0], farm1.getMember(4 * i),))
-        print('emulator 1 start member %s' % (4 * i + 1))
+        print('---------------------------emulator 1 start member %s' % (4 * i + 1))
         t1 = threading.Thread(target=farm1.memberhavior, args=(farm1.nameList[1], farm1.getMember(4 * i + 1),))
-        print('emulator 2 start member %s' % (4 * i + 2))
+        print('---------------------------emulator 2 start member %s' % (4 * i + 2))
         t2 = threading.Thread(target=farm1.memberhavior, args=(farm1.nameList[2], farm1.getMember(4 * i + 2),))
-        print('emulator 3 start member %s' % (4 * i + 3))
+        print('---------------------------emulator 3 start member %s' % (4 * i + 3))
         t3 = threading.Thread(target=farm1.memberhavior, args=(farm1.nameList[3], farm1.getMember(4 * i + 3),))
 
         t0.start()
@@ -432,6 +439,6 @@ if __name__ == '__main__':
         farm1.endGame()
 
     farm1.startGame()
-    print('emulator 0 start president')
+    print('---------------------------emulator 0 start president')
     farm1.memberhavior(farm1.nameList[0], farm1.getPresident())
     farm1.endGame()
