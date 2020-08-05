@@ -543,7 +543,24 @@ if __name__ == '__main__':
 
         farm1.endGame()
 
-    farm1.startGame()
+    emulatorName = farm1.nameList[0]
+
+    cmd = 'adb -s %s shell am start -n %s' % (emulatorName, farm1.pcrActivityName)
+    try:
+        os.system(cmd)
+    except:
+        print('---------------------------%s start game fail' % emulatorName)
+        exit(1)
+
     print('---------------------------emulator 0 start president')
-    farm1.memberhavior(farm1.nameList[0], farm1.getPresident())
-    farm1.endGame()
+
+    t = threading.Thread(target=farm1.memberhavior, args=(emulatorName, farm1.getPresident(),))
+    t.start()
+    t.join()
+
+    cmd = 'adb -s %s shell am force-stop com.bilibili.priconne' % emulatorName
+    try:
+        os.system(cmd)
+    except:
+        print('---------------------------%s end game fail' % emulatorName)
+        exit(1)
